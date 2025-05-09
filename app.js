@@ -1,5 +1,5 @@
 // Tasa de cambio fija
-const tasaCambio = 150; // ARS a USD (ejemplo)
+const tasaCambio = 150; // ARS a USD
 let history = []; // Array para guardar las operaciones
 
 // Función para convertir ARS a USD
