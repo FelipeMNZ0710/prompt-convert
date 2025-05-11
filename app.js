@@ -1,76 +1,55 @@
-// Tasa de cambio fija
-const tasaCambio = 150; // ARS a USD
-let history = []; // Array para guardar las operaciones
-
-// Función para convertir ARS a USD
-function convertCurrency(pesos) {
-return pesos / tasaCambio;
-}
-
-// Función para mostrar el menú y obtener la opción del usuario
-function mostrarMenu() {
-let opcion;
-do {
-    opcion = prompt(
-    "1) Divisa (ARS -> USD)\n2) Salir\nElige una opción:"
-    );
-    if (opcion === null) { // Handle Cancelar
-      return "2"; // Tratar Cancelar como "Salir"
+function menu() {
+    let opcion = prompt("Seleccione una opción:\n\n1) Divisa (ARS -> USD)\n2) Salir");
+    while (opcion !== "1" && opcion !== "2") {
+        opcion = prompt("Opción inválida. Por favor, seleccione una opción válida.");
     }
-    if (opcion !== "1" && opcion !== "2") {
-    alert("Opción inválida. Por favor, elige 1 o 2.");
+    if (opcion === "1") {
+        divisa();
+    } else if (opcion === "2") {
+        imprimirHistorial();
     }
-} while (opcion !== "1" && opcion !== "2");
-return opcion;
 }
 
-// Función para validar la entrada de la cantidad
-function validarCantidad(entrada) {
-  if (entrada === null) { // Handle Cancelar
-    return null;
-}
-let numero = parseFloat(entrada);
-if (isNaN(numero) || numero <= 0) {
-    return null;
-}
-return numero;
-}
-
-// Conversión y guardado de la operación
-function realizarConversion() {
-let pesos = validarCantidad(prompt("Ingresa la cantidad en ARS:"));
-if (pesos !== null) {
-    let dolares = convertCurrency(pesos);
-    let operacion = {
-    tipo: "divisa",
-    entrada: `${pesos} ARS`,
-    salida: `${dolares.toFixed(2)} USD`,
-    fecha: new Date().toLocaleString(),
-    };
-    history.push(operacion);
-    alert(`${pesos} ARS son ${dolares.toFixed(2)} USD`);
-} else {
-    alert("Cantidad inválida. Ingresa un número mayor que cero.");
-}
+function divisa() {
+    const DOLAR_BLUE_EN_ARS = 1175
+    ; // Valor actual del dólar blue en pesos argentinos
+    let pesos = prompt("Ingrese la cantidad en ARS:");
+    while (!/^\d+$/.test(pesos)) {
+        pesos = prompt("Valor inválido. Por favor, ingrese un número entero.");
+    }
+    
+    if (parseFloat(pesos) > 1000000) {
+        alert("La cantidad ingresada es demasiado grande");
+    } else {
+        let resultado = parseFloat(pesos) / DOLAR_BLUE_EN_ARS;
+        alert(`La conversión de ${pesos} ARS es igual a ${resultado.toFixed(2)} USD`);
+        registrarOperacion(pesos, resultado);
+    }
 }
 
-//El historial en la consola
-function mostrarHistorial() {
-console.log("Historial de Operaciones:");
-if (history.length === 0) {
-    console.log("No hay operaciones registradas.");
-} else {
-    history.forEach(operacion => console.log(operacion));
-}
+
+function imprimirHistorial() {
+    let texto = "";
+    for (let i = 0; i < history.length; i++) {
+        texto += `Tipo: ${history[i].tipo}\n`;
+        texto += `Entrada: ${history[i].entrada}\n`;
+        texto += `Salida: ${history[i].salida}\n`;
+        texto += `Fecha: ${history[i].fecha}\n\n`;
+    }
+    alert(texto);
 }
 
-// Flujo principal de la aplicación
-let opcion;
-do {
-opcion = mostrarMenu();
-if (opcion === "1") {
-    realizarConversion();
+function registrarOperacion(pesos, resultado) {
+    history.push({
+        tipo: 'divisa',
+        entrada: pesos + ' ARS',
+        salida: resultado.toFixed(2) + ' USD',
+        fecha: new Date().toLocaleString()
+    });
 }
-} while (opcion !== "2");
 
-mostrarHistorial();
+let history = [];
+
+window.onload = function() {
+    menu();
+}
