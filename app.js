@@ -4,15 +4,14 @@ function menu() {
         opcion = prompt("Opción inválida. Por favor, seleccione una opción válida.");
     }
     if (opcion === "1") {
-        divisa();
+        convertCurrency();
     } else if (opcion === "2") {
         imprimirHistorial();
     }
 }
 
-function divisa() {
+function convertCurrency() {
     const DOLAR_BLUE_EN_ARS = 1175
-    ; // Valor actual del dólar blue en pesos argentinos
     let pesos = prompt("Ingrese la cantidad en ARS:");
     while (!/^\d+$/.test(pesos)) {
         pesos = prompt("Valor inválido. Por favor, ingrese un número entero.");
